@@ -1,0 +1,8 @@
+{
+  "Template": {
+    "TemplateName": "testtemplate",
+    "SubjectPart": "Temperature Difference",
+    "TextPart": "Test email body!",
+    "HtmlPart": "<html>\r\n\r\n<head>\r\n <title>Test Title</title>\r\n</head>\r\n\r\n<body>\r\n {{response}} \r\n</body>\r\n\r\n</html>"
+  }
+}

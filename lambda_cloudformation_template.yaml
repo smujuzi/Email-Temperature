@@ -1,0 +1,47 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: Resources needed to deploy scheduled lambda function.
+Parameters:
+  newFileName:
+  Type: String
+Resources:
+  LambdaFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: stuart-email-version-two #optional
+      Description: A starter AWS Lambda function.
+      Runtime: nodejs14.x
+      Role: arn:aws:iam::1234:role/stuart-email-two-role
+      Handler: index.handler
+      Code:
+        S3Bucket: stuart-email-bucket
+        S3Key: !Ref "newFileName"
+      Timeout: 30
+      MemorySize: 128
+      TracingConfig:
+        Mode: Active
+
+  ScheduledRule:
+    Type: AWS::Events::Rule
+    DependsOn: LambdaFunction
+    Properties:
+      Name: stuart-email-cloudwatch # optional
+      Description: "ScheduledRule"
+      ScheduledExpression: "rate(1 day)"
+      State: "ENABLED"
+      Targets:
+        - Arn:
+            Fn::GetAtt: 
+            -"LambdaFunction"
+            -"Arn"
+          Id: "TargetFunctionV1"
+  PermissionForEventsToInvokeLambda:
+    Type: AWS::Lambda::Permission
+    DependsOn: LambdaFunction
+    Properties:
+      FunctionName: !Ref "LambdaFunciton"
+      Action: "lambda:InvokeFunction"
+      Principal: "events.amazon.com"
+      SourceArn:
+        Fn::GetAtt:
+          - "ScheduledRule"
+          - "Arn"

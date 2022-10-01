@@ -1,0 +1,36 @@
+Cloud Formation
+
+Infrastructure as Code
+Describe the resources with a JSON or YAML descriptor
+
+A Template
+
+{
+    "AWSTemplateFromatVersion" : "2010-09-09",
+    "Description" : "Provide an S3-based website",
+    "Resources" : { ... },
+    "Outputs" : { ... }
+}
+
+    Resources
+
+    "S3Bucket" : {
+        "Type" : "AWS::S3::Bucket",
+        "Properties" : { ... },
+        "DeletionPolicy" : "Retain"  //Defines the lifecycle  of the resource with respect to the stack
+    }
+
+    Properties {
+        "AccessControl" : "PublicRead",
+        "WebsiteConfiguration": {
+            "IndexDocument" : "index.html",
+            "ErrorDocument" : "error.html"
+        }
+    }
+
+    Outputs
+
+    "WebsiteURL" : { //Name to be printed
+        "Value" : { "Fn:: GetAtt" : ["S3Bucket", "WebsiteURL"] }, //Value to be printed
+        "Description" : "URL for website hosted on S3" // Description to be printed
+    }
