@@ -1,7 +1,8 @@
 const axios = require("axios");
+require("dotenv/config");
 
 async function getCurrentTemperatureFromAPI(input) {
-  const myKey = "b224a548fa8abc35fc18c056f35f2674";
+  const myKey = process.env.WEATHER_API_KEY;
   let response = await axios.get(
     `https://api.openweathermap.org/data/2.5/weather?q=${input}&appid=${myKey}`
   );
